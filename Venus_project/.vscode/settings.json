@@ -1,9 +1,9 @@
 {
-    "idf.adapterTargetName": "esp32",
-    "idf.portWin": "COM6",
-    "idf.flashType": "UART",
-    "files.associations": {
-        "*.ejs": "html",
-        "sensors.h": "c"
-    }
+	"idf.adapterTargetName": "esp32",
+	"idf.flashType": "UART",
+	"idf.portWin": "COM10"
+  "files.associations": {
+      "*.ejs": "html",
+      "sensors.h": "c"
+  }
 }
