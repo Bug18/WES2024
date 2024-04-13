@@ -22,7 +22,7 @@
 
 
 #define BUZZER_PIN             2
-#define BUZEZR_MAX_QUEUE_LEN   10
+#define BUZEZR_MAX_QUEUE_LEN   1
 
 #define GPIO_BIT_MASK(X) ((1ULL << (X)))
 
@@ -33,4 +33,4 @@ typedef enum {
 
 void buzzer_init();
 
-void buzzer_send_signal();
+void buzzer_send_signal(buzzer_signal_enum_t event);

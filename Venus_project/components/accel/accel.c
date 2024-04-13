@@ -5,6 +5,7 @@ static stmdev_ctx_t ctx;
 static spi_device_handle_t hdev;
 
 int32_t accel_init() {
+    /*
      spi_bus_config_t bus_config = {
         .miso_io_num = 19,
         .mosi_io_num = 23,
@@ -18,6 +19,7 @@ int32_t accel_init() {
         printf("neradi spi init\n");
         return 1;
     }
+    */
 
     spi_device_interface_config_t device_config = {
         .clock_speed_hz = 1000000,

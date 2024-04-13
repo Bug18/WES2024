@@ -9,6 +9,9 @@
 
 //--------------------------------- INCLUDES ----------------------------------
 #include "user_interface.h"
+#include "led.h"
+#include "sensors.h"
+#include "Buzzer_signaling.h"
 
 //---------------------------------- MACROS -----------------------------------
 
@@ -24,6 +27,11 @@
 void app_main(void)
 {
     user_interface_init();
+    vTaskDelay(2000 / portTICK_PERIOD_MS); 
+
+    _led_task_init();
+    buzzer_init();
+    sensors_init();
 }
 
 //---------------------------- PRIVATE FUNCTIONS ------------------------------
