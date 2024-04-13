@@ -39,7 +39,7 @@ QueueHandle_t p_user_interface_queue = NULL;
 //------------------------------ PUBLIC FUNCTIONS -----------------------------
 void user_interface_init(void)
 {
-    led_init(LED_BLUE);
+    // led_init(LED_BLUE);
     gui_init();
 
     p_user_interface_queue = xQueueCreate(USER_INTERFACE_QUEUE_SIZE, sizeof(gui_app_event_t));
