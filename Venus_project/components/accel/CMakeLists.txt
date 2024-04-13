@@ -1,2 +1,4 @@
-idf_component_register(SRCS "lis2dh12_reg.c"
+idf_component_register(SRCS "accel.c"
+                    REQUIRES "driver"
+                    REQUIRES "lis2dh12_reg"
                     INCLUDE_DIRS "include")
