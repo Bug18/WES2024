@@ -30,4 +30,4 @@ void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event
 esp_mqtt_client_handle_t *mqtt_app_start(void);
 esp_err_t example_connect(void);
 int send_sensor_message(esp_mqtt_client_handle_t *client, float temp, float hum, float *acc);
-int send_game_message(esp_mqtt_client_handle_t *client, char *turn, int *indexX, int *indexO);
+send_game_message(esp_mqtt_client_handle_t *client, char *turn, int *indexX, int oLen, int *indexO, int xLen);
