@@ -1,13 +1,3 @@
-/**
- * @file main.c
- *
- * @brief
- *
- * COPYRIGHT NOTICE: (c) 2022 Byte Lab Grupa d.o.o.
- * All rights reserved.
- */
-
-//--------------------------------- INCLUDES ----------------------------------
 #include "user_interface.h"
 #include <esp_event.h>
 #include <esp_log.h>
@@ -22,15 +12,6 @@
 // #include "provisioning.h"
 #include "mqtt_driver.h"
 
-//---------------------------------- MACROS -----------------------------------
-
-//-------------------------------- DATA TYPES ---------------------------------
-
-//---------------------- PRIVATE FUNCTION PROTOTYPES --------------------------
-
-//------------------------- STATIC DATA & CONSTANTS ---------------------------
-
-//------------------------------- GLOBAL DATA ---------------------------------
 
 #define DELAY_TIME_MS (5000U) 
 
@@ -79,7 +60,15 @@ void app_main(void)
     float temp = 23.2f;
     float hum = 53.9f;
 
-    send_sensor_message(client, temp, hum, acc);
+    int message_id;
+
+    message_id = send_sensor_message(client, temp, hum, acc);
+
+    if (message_id == -1){
+        printf("Message publish failed");
+    }else{
+        printf("Message succesfully published");
+    }
 
     /* Do something */
     esp_err_t err = ESP_OK;

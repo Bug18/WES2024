@@ -105,17 +105,13 @@ esp_mqtt_client_handle_t *mqtt_app_start(void)
     esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler, NULL);
     esp_mqtt_client_start(client);
 
-	// if (client == NULL) {
-	// 	printf("Failedddddddddddddddddd! Stupid esp32!!!!!!!!!!!!!\n");
-	// } else {
-	// 	printf("Kinda works\n");
-	// }
-
 	return &client;
 }
 
 
-void send_sensor_message(esp_mqtt_client_handle_t *client, float temp, float hum, float *acc){
+int send_sensor_message(esp_mqtt_client_handle_t *client, float temp, float hum, float *acc){
+    int message_id;
+
 	cJSON *root = cJSON_CreateObject();
     cJSON_AddNumberToObject(root, "temp", temp);
     cJSON_AddNumberToObject(root, "hum", hum);
@@ -127,46 +123,35 @@ void send_sensor_message(esp_mqtt_client_handle_t *client, float temp, float hum
     char *jsonMessage = cJSON_PrintUnformatted(root);
 
     // Publish JSON message on MQTT
-    esp_mqtt_client_publish(*client, "WES/Venus/sensors", jsonMessage, 0, 1, 0);
+    message_id = esp_mqtt_client_publish(*client, "WES/Venus/sensors", jsonMessage, 0, 1, 0);
 
     // Free memory
     free(jsonMessage);
     cJSON_Delete(root);
+
+    return message_id;
 }
 
 
-esp_err_t example_connect(void)
-{
-#if CONFIG_EXAMPLE_CONNECT_ETHERNET
-    if (example_ethernet_connect() != ESP_OK) {
-        return ESP_FAIL;
+int send_game_message(esp_mqtt_client_handle_t *client, char *turn, int *indexX, int *indexO){
+    int message_id;
+
+    cJSON *root = cJSON_CreateObject();
+    cJSON *xArray = cJSON_CreateArray();
+    cJSON *oArray = cJSON_CreateArray();
+    for (int i = 0; i < 9; i++){
+        cJSON_AddItemToArray(xArray, cJSON_CreateNumber(indexX[i]));
+        cJSON_AddItemToArray(oArray, cJSON_CreateNumber(indexO[i]));
     }
-    ESP_ERROR_CHECK(esp_register_shutdown_handler(&example_ethernet_shutdown));
-#endif
-#if CONFIG_EXAMPLE_CONNECT_WIFI
-    if (example_wifi_connect() != ESP_OK) {
-        return ESP_FAIL;
-    }
-    ESP_ERROR_CHECK(esp_register_shutdown_handler(&example_wifi_shutdown));
-#endif
-#if CONFIG_EXAMPLE_CONNECT_PPP
-    if (example_ppp_connect() != ESP_OK) {
-        return ESP_FAIL;
-    }
-    ESP_ERROR_CHECK(esp_register_shutdown_handler(&example_ppp_shutdown));
-#endif
+    cJSON_AddItemToObject(root, "indexX", xArray);
+    cJSON_AddItemToObject(root, "indexY", yArray);
 
-#if CONFIG_EXAMPLE_CONNECT_ETHERNET
-    example_print_all_netif_ips(EXAMPLE_NETIF_DESC_ETH);
-#endif
+    char *jsonMessage = cJSON_PrintUnformatted(root, jsonMessage);
+    
+    message_id = esp_mqtt_client_publish(*client, "WES/Venus/game", jsonMessage, 0, 1, 0);
 
-#if CONFIG_EXAMPLE_CONNECT_WIFI
-    example_print_all_netif_ips(EXAMPLE_NETIF_DESC_STA);
-#endif
+    free(jsonMessage);
+    cJSON_Delete(root);
 
-#if CONFIG_EXAMPLE_CONNECT_PPP
-    example_print_all_netif_ips(EXAMPLE_NETIF_DESC_PPP);
-#endif
-
-    return ESP_OK;
+    return message_id;
 }
