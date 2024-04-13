@@ -26,6 +26,7 @@
 #include "lvgl_helpers.h"
 
 #include "gui_app.h"
+#include "ui.h"
 //---------------------------------- MACROS -----------------------------------
 #define LV_TICK_PERIOD_MS (1U)
 
@@ -70,7 +71,8 @@ void gui_init()
 //---------------------------- PRIVATE FUNCTIONS ------------------------------
 static void _create_demo_application(void)
 {
-    gui_app_init();
+    //gui_app_init();
+    ui_init();
 }
 
 static void _lv_tick_timer(void *p_arg)

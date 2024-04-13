@@ -33,7 +33,12 @@ typedef struct
 //------------------------- STATIC DATA & CONSTANTS ---------------------------
 static const _led_config_t _led_info[LED_COUNT] = {
     { .led = LED_BLUE, .gpio = 14, .b_is_active_on_high_level = true },
+    { .led = LED_GREEN, .gpio = 27, .b_is_active_on_high_level = true},
+    { .led = LED_RED, .gpio = 26, .b_is_active_on_high_level = true},
 };
+
+QueueHandle_t ledEventQueue;
+
 //------------------------------- GLOBAL DATA ---------------------------------
 
 //------------------------------ PUBLIC FUNCTIONS -----------------------------
@@ -95,6 +100,61 @@ esp_err_t led_off(led_t led)
 
     return esp_err;
 }
+
+
+//LED signalization 
+static void _led_task(void *p_parametar)
+{
+    while(1) {
+        _led_event_t event;
+        if (xQueueReceive(ledEventQueue, &event, portMAX_DELAY) == pdFALSE){
+            //ESP_LOGE(pcTaskGetName(NULL), "Couldn't recieve next action from queue...  Too much wait or internal error");
+            continue;
+        }
+
+        for(int i = 0; i < event.count; i ++)
+        {
+            led_on(event.led);
+            vTaskDelay(event.delay_on/ portTICK_PERIOD_MS); 
+
+            led_off(event.led);
+            vTaskDelay(event.delay_off / portTICK_PERIOD_MS); 
+        }
+
+    }
+}
+
+void _led_task_init()
+{
+    //stvaranje queue-a za led events
+    ledEventQueue = xQueueCreate(10, sizeof(_led_event_t));
+    if (ledEventQueue == NULL) {
+        printf("Failed to create led event queue");
+    }
+
+    //inicijalizacija ledica
+    for(int i = 0; i < LED_COUNT; i ++) {
+        led_init(_led_info[i].led);
+    }
+
+    xTaskCreate(&_led_task, "led_task", 2 * 1024, NULL, 5, NULL);
+}
+
+
+void led_queue_message(_led_event_t *event){
+    xQueueSend(ledEventQueue, event, pdMS_TO_TICKS(500));
+}
+
+void led_queue_blue_led(){
+    _led_event_t blue_event = {
+        .led = LED_BLUE,
+        .delay_on = 800,
+        .delay_off = 200,
+        .count = 1
+    };
+    xQueueSend(ledEventQueue, &blue_event, pdMS_TO_TICKS(500));
+}
+
 
 //---------------------------- PRIVATE FUNCTIONS ------------------------------
 
