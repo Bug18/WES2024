@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "Wifi.h"
-// #include "provisioning.h"
 #include "mqtt_driver.h"
 
 
@@ -17,6 +16,8 @@
 
 void app_main(void)
 {
+    /*----------------------------Intialization----------------------------*/
+
     user_interface_init();
     
     //Initialize NVS
@@ -27,9 +28,12 @@ void app_main(void)
     }
     ESP_ERROR_CHECK(ret);
 
+    // Initialize WiFi
     ESP_LOGI("WIFI", "ESP_WIFI_MODE_STA");
     wifi_init_sta();
 
+
+    // Initialize MQTT
     ESP_LOGI("MQTT", "[APP] Startup..");
     ESP_LOGI("MQTT", "[APP] Free memory: %" PRIu32 " bytes", esp_get_free_heap_size());
     ESP_LOGI("MQTT", "[APP] IDF version: %s", esp_get_idf_version());
@@ -55,6 +59,8 @@ void app_main(void)
     // vTaskDelay(DELAY_TIME_MS / portTICK_PERIOD_MS);
 
     esp_mqtt_client_handle_t *client = mqtt_app_start();
+
+    /*----------------------------End of Intialization----------------------------*/
 
     float acc[3] = {5.0f, -5.0f, 5.0f};
     float temp = 23.2f;
