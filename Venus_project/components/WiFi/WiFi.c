@@ -91,3 +91,12 @@ void wifi_init_sta(void)
         ESP_LOGE("WIFI", "UNEXPECTED EVENT");
     }
 }
+
+
+esp_err_t disconnect_wifi(void){
+    esp_err_t err = ESP_OK;
+    
+    err = esp_wifi_stop();
+    
+    return err;
+}

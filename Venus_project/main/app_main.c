@@ -75,27 +75,27 @@ void app_main(void)
 
     esp_mqtt_client_handle_t *client = mqtt_app_start();
 
-    float acc[3] = {3.0f, 2.0f, 1.0f};
-    float temp = 25.2f;
-    float hum = 55.5f;
+    float acc[3] = {5.0f, -5.0f, 5.0f};
+    float temp = 23.2f;
+    float hum = 53.9f;
 
     send_sensor_message(client, temp, hum, acc);
 
     /* Do something */
-
+    esp_err_t err = ESP_OK;
     int index = 0;
     for(;;)
     {
-        // if (index == 1000){
-        //     err = _wifi_disconnect();
+        if (index == 3){
+            err = disconnect_wifi();
 
-        //     if (err == ESP_OK){
-        //         printf("Disconnect succesful");
-        //         break;
-        //     } else {
-        //         printf("Disconnect unsuccesful!");
-        //     }
-        // }
+            if (err == ESP_OK){
+                printf("Disconnect succesful");
+                break;
+            } else {
+                printf("Disconnect unsuccesful!");
+            }
+        }
         printf("[%d] WiFi Example!\n", index);
         index++;
         vTaskDelay(DELAY_TIME_MS / portTICK_PERIOD_MS);

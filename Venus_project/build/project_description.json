@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "esp32_gui",
-    "project_version":    "4d997ba-dirty",
+    "project_version":    "3f1ff00-dirty",
     "project_path":       "C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project",
     "idf_path":           "C:/Users/Naglic/esp/v5.0.6/esp-idf",
     "build_dir":          "C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build",
