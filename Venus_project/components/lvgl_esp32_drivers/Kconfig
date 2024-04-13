@@ -1,0 +1,18 @@
+rsource "lvgl_tft/Kconfig"
+rsource "lvgl_touch/Kconfig"
+
+menu "LVGL Display Size"
+
+	config LV_HOR_RES_MAX
+        int
+        prompt "Max. horizontal screen size."
+        range 0 1280
+            default 320
+
+    config LV_VER_RES_MAX
+        int
+        prompt "Max vertical screen size."
+	    range 0 800
+            default 240
+
+endmenu
