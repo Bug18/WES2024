@@ -10,6 +10,9 @@
 #include <stdbool.h>
 #include "Wifi.h"
 #include "mqtt_driver.h"
+#include "led.h"
+#include "sensors.h"
+#include "Buzzer_signaling.h"
 
 
 #define DELAY_TIME_MS (5000U) 
@@ -49,6 +52,13 @@ void app_main(void)
     // ESP_ERROR_CHECK(nvs_flash_init());
     // ESP_ERROR_CHECK(esp_netif_init());
     // ESP_ERROR_CHECK(esp_event_loop_create_default());
+
+    vTaskDelay(2000 / portTICK_PERIOD_MS); 
+
+    _led_task_init();
+    buzzer_init();
+    sensors_init();
+}
 
     /* This helper function configures Wi-Fi or Ethernet, as selected in menuconfig.
      * Read "Establishing Wi-Fi or Ethernet Connection" section in

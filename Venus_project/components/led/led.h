@@ -16,6 +16,10 @@ extern "C" {
 
 //--------------------------------- INCLUDES ----------------------------------
 #include "esp_err.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/queue.h"
+#include <stdio.h>
 
 //---------------------------------- MACROS -----------------------------------
 
@@ -24,12 +28,24 @@ extern "C" {
  * @brief Enums hold all board LEDs.
  *
  */
+
+#define LED_COUNT 3
+
 typedef enum
 {
     LED_BLUE,
-
-    LED_COUNT
+    LED_GREEN,
+    LED_RED,
 } led_t;
+
+
+typedef struct
+{
+    led_t  led;
+    uint16_t delay_on;
+    uint16_t delay_off;
+    uint16_t count;
+} _led_event_t;
 
 //---------------------- PUBLIC FUNCTION PROTOTYPES --------------------------
 /**
@@ -58,6 +74,16 @@ esp_err_t led_on(led_t led);
  * @return esp_err_t ESP_OK on success, fail otherwise.
  */
 esp_err_t led_off(led_t led);
+
+
+//Inicijalizacija ledica i stvaranje led queue-a
+void _led_task_init();
+
+//dodavanje led eventa u led queue
+void led_queue_message(_led_event_t *event);
+
+//dodavanje blinkanja blue ledice (LED signalizacija iz zadatka)
+void led_queue_blue_led();
 
 #ifdef __cplusplus
 }
