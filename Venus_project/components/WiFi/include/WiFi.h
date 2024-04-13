@@ -1,31 +1,50 @@
-//-------------------------------- DATA TYPES ---------------------------------
+#include <string.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/event_groups.h"
+#include "esp_system.h"
+#include "esp_wifi.h"
+#include "esp_event.h"
+#include "esp_log.h"
+#include "nvs_flash.h"
 
-//---------------------- PRIVATE FUNCTION PROTOTYPES --------------------------
-/**
- * @brief It's a callback function that is called when an event occurs.
- *
- * @param [in] p_arg This is a pointer to the argument passed to the event handler.
- * @param [in] event_base The event base that the event is associated with.
- * @param [in] event_id The event ID.
- * @param [in] p_event_data This is the data that is passed to the event handler.
- */
-void _event_handler(void *p_arg, esp_event_base_t event_base, int32_t event_id, void *p_event_data);
+#include "lwip/err.h"
+#include "lwip/sys.h"
 
-/**
- * @brief It sets up the ESP32 as a station.
- *
- * @return The error code of the last function call.
- */
-esp_err_t _wifi_init_sta(void);
 
-/**
- * @brief If the NVS partition is not initialized, initialize it.
- *
- * @return The return value is the bitwise OR of the return values of nvs_flash_erase() and
- * nvs_flash_init().
- */
-esp_err_t _nvs_init(void);
+// #define EXAMPLE_ESP_WIFI_SSID      CONFIG_ESP_WIFI_SSID
+// #define EXAMPLE_ESP_WIFI_PASS      CONFIG_ESP_WIFI_PASSWORD
+#define EXAMPLE_ESP_MAXIMUM_RETRY  10
 
-//------------------------- STATIC DATA & CONSTANTS ---------------------------
-static const char *TAG = "WIFI";
+// #if CONFIG_ESP_WIFI_AUTH_OPEN
+#define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_OPEN
+// #elif CONFIG_ESP_WIFI_AUTH_WEP
+// #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WEP
+// #elif CONFIG_ESP_WIFI_AUTH_WPA_PSK
+// #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WPA_PSK
+// #elif CONFIG_ESP_WIFI_AUTH_WPA2_PSK
+// #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WPA2_PSK
+// #elif CONFIG_ESP_WIFI_AUTH_WPA_WPA2_PSK
+// #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WPA_WPA2_PSK
+// #elif CONFIG_ESP_WIFI_AUTH_WPA3_PSK
+// #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WPA3_PSK
+// #elif CONFIG_ESP_WIFI_AUTH_WPA2_WPA3_PSK
+// #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WPA2_WPA3_PSK
+// #elif CONFIG_ESP_WIFI_AUTH_WAPI_PSK
+// #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WAPI_PSK
+// #endif
 
+
+/* The event group allows multiple bits for each event, but we only care about two events:
+ * - we are connected to the AP with an IP
+ * - we failed to connect after the maximum amount of retries */
+#define WIFI_CONNECTED_BIT BIT0
+#define WIFI_FAIL_BIT      BIT1
+
+#define SSID ("ZICER-guest")
+#define PASS ("Z1c3r.10020")
+#define DELAY_TIME_MS (5000U)
+
+void event_handler(void* arg, esp_event_base_t event_base,
+                                int32_t event_id, void* event_data);
+void wifi_init_sta(void);

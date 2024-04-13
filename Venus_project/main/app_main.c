@@ -19,6 +19,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "Wifi.h"
+// #include "provisioning.h"
+#include "mqtt_driver.h"
 
 //---------------------------------- MACROS -----------------------------------
 
@@ -32,65 +34,70 @@
 
 #define DELAY_TIME_MS (5000U) 
 
-//------------------------------ PUBLIC FUNCTIONS -----------------------------
 void app_main(void)
 {
     user_interface_init();
-
-    esp_err_t err = ESP_OK;
-
-    /* Initialize NVS partition */
-    err = _nvs_init();
-
-    if(ESP_OK == err)
-    {
-        /* Initialize TCP/IP */
-        ESP_LOGI(TAG, " Initialize TCP/IP");
-        err = esp_netif_init();
+    
+    //Initialize NVS
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+      ESP_ERROR_CHECK(nvs_flash_erase());
+      ret = nvs_flash_init();
     }
+    ESP_ERROR_CHECK(ret);
 
-    if(ESP_OK == err)
-    {
-        /* Initialize the event loop */
-        ESP_LOGI(TAG, " Initialize the event loop");
-        err = esp_event_loop_create_default();
-    }
+    ESP_LOGI("WIFI", "ESP_WIFI_MODE_STA");
+    wifi_init_sta();
 
-    if(ESP_OK == err)
-    {
-        /* Register our event handler for Wi-Fi and IP and related events */
-        ESP_LOGI(TAG, " Register our event handler for Wi-Fi");
-        err = esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &_event_handler, NULL);
-    }
+    ESP_LOGI("MQTT", "[APP] Startup..");
+    ESP_LOGI("MQTT", "[APP] Free memory: %" PRIu32 " bytes", esp_get_free_heap_size());
+    ESP_LOGI("MQTT", "[APP] IDF version: %s", esp_get_idf_version());
 
-    if(ESP_OK == err)
-    {
-        /* Register our event handler for Wi-Fi and IP and related events */
-        ESP_LOGI(TAG, " Register our event handler for IP and related events");
-        err = esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &_event_handler, NULL);
-    }
+    esp_log_level_set("*", ESP_LOG_INFO);
+    esp_log_level_set("mqtt_client", ESP_LOG_VERBOSE);
+    esp_log_level_set("mqtt_example", ESP_LOG_VERBOSE);
+    esp_log_level_set("transport_base", ESP_LOG_VERBOSE);
+    esp_log_level_set("esp-tls", ESP_LOG_VERBOSE);
+    esp_log_level_set("transport", ESP_LOG_VERBOSE);
+    esp_log_level_set("outbox", ESP_LOG_VERBOSE);
 
-    if(ESP_OK == err)
-    {
-        /* Start the station */
-        ESP_LOGI(TAG, " Start the station");
-        err = _wifi_init_sta();
-    }
+    // ESP_ERROR_CHECK(nvs_flash_init());
+    // ESP_ERROR_CHECK(esp_netif_init());
+    // ESP_ERROR_CHECK(esp_event_loop_create_default());
 
-    if(ESP_OK != err)
-    {
-        ESP_LOGE(TAG, "Init failed");
-    }
+    /* This helper function configures Wi-Fi or Ethernet, as selected in menuconfig.
+     * Read "Establishing Wi-Fi or Ethernet Connection" section in
+     * examples/protocols/README.md for more information about this function.
+     */
+    // ESP_ERROR_CHECK(example_connect());
+
+    // vTaskDelay(DELAY_TIME_MS / portTICK_PERIOD_MS);
+
+    esp_mqtt_client_handle_t *client = mqtt_app_start();
+
+    float acc[3] = {3.0f, 2.0f, 1.0f};
+    float temp = 25.2f;
+    float hum = 55.5f;
+
+    send_sensor_message(client, temp, hum, acc);
 
     /* Do something */
 
     int index = 0;
     for(;;)
     {
+        // if (index == 1000){
+        //     err = _wifi_disconnect();
+
+        //     if (err == ESP_OK){
+        //         printf("Disconnect succesful");
+        //         break;
+        //     } else {
+        //         printf("Disconnect unsuccesful!");
+        //     }
+        // }
         printf("[%d] WiFi Example!\n", index);
         index++;
         vTaskDelay(DELAY_TIME_MS / portTICK_PERIOD_MS);
     }
-    
 }
-//---------------------------- PRIVATE FUNCTIONS ------------------------------

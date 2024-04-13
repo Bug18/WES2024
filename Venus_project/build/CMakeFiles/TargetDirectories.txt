@@ -643,6 +643,13 @@ C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/bui
 C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/led/CMakeFiles/install.dir
 C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/led/CMakeFiles/install/local.dir
 C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/led/CMakeFiles/install/strip.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/mqtt_driver/CMakeFiles/__idf_mqtt_driver.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/mqtt_driver/CMakeFiles/edit_cache.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/mqtt_driver/CMakeFiles/rebuild_cache.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/mqtt_driver/CMakeFiles/list_install_components.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/mqtt_driver/CMakeFiles/install.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/mqtt_driver/CMakeFiles/install/local.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/mqtt_driver/CMakeFiles/install/strip.dir
 C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/user_interface/CMakeFiles/__idf_user_interface.dir
 C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/user_interface/CMakeFiles/edit_cache.dir
 C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/user_interface/CMakeFiles/rebuild_cache.dir
