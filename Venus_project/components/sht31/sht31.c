@@ -5,13 +5,14 @@ static i2c_port_t i2c_port = I2C_NUM_1;
 
 esp_err_t sht31_init(void)
 {
-    i2c_config_t conf;
+    i2c_config_t conf = { };
     conf.mode = I2C_MODE_MASTER;
     conf.sda_io_num = SDA_IO_NUM;
     conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
     conf.scl_io_num = SCL_IO_NUM;
     conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
-    conf.master.clk_speed = 1000000;
+    conf.master.clk_speed = 10000;
+    conf.clk_flags = 0;
     i2c_param_config(i2c_port, &conf);
     return i2c_driver_install(i2c_port, conf.mode, I2C_MASTER_RX_BUF_DISABLE, I2C_MASTER_TX_BUF_DISABLE, 0);
 }
