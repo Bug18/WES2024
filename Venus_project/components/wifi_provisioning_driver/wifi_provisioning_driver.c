@@ -246,7 +246,7 @@ void initalize_provisioning(void)
          */
         const char *service_key = NULL;
 
-#ifdef CONFIG_EXAMPLE_PROV_TRANSPORT_BLE
+#ifdef CONFIG_WIFI_PROV_TRANSPORT_BLE
         /* This step is only useful when scheme is wifi_prov_scheme_ble. This will
          * set a custom 128 bit UUID which will be included in the BLE advertisement
          * and will correspond to the primary GATT service that provides provisioning

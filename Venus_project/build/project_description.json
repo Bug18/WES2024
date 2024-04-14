@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "esp32_gui",
-    "project_version":    "b8072a3-dirty",
+    "project_version":    "34d3dd4-dirty",
     "project_path":       "C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project",
     "idf_path":           "C:/Users/Naglic/esp/v5.0.6/esp-idf",
     "build_dir":          "C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build",
@@ -1044,7 +1044,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/protocomm/libprotocomm.a",
-            "sources": [ "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/common/protocomm.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/proto-c/constants.pb-c.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/proto-c/sec0.pb-c.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/proto-c/sec1.pb-c.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/proto-c/sec2.pb-c.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/proto-c/session.pb-c.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/transports/protocomm_console.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/transports/protocomm_httpd.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/security/security0.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/security/security1.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/security/security2.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/crypto/srp6a/esp_srp.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/crypto/srp6a/esp_srp_mpi.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/simple_ble/simple_ble.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/transports/protocomm_ble.c" ],
+            "sources": [ "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/common/protocomm.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/proto-c/constants.pb-c.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/proto-c/sec0.pb-c.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/proto-c/sec1.pb-c.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/proto-c/sec2.pb-c.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/proto-c/session.pb-c.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/transports/protocomm_console.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/transports/protocomm_httpd.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/security/security1.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/security/security2.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/crypto/srp6a/esp_srp.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/crypto/srp6a/esp_srp_mpi.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/simple_ble/simple_ble.c", "C:/Users/Naglic/esp/v5.0.6/esp-idf/components/protocomm/src/transports/protocomm_ble.c" ],
             "include_dirs": [ "include/common", "include/security", "include/transports" ]
         },
         "pthread": {
