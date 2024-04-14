@@ -2,6 +2,11 @@
 
 	"idf.adapterTargetName": "esp32",
 	"idf.flashType": "UART",
-	"idf.portWin": "COM10"
+	"idf.portWin": "COM10",
+	"files.associations": {
+		"*.ejs": "html",
+		"led.h": "c",
+		"stdio.h": "c"
+	}
 
 }

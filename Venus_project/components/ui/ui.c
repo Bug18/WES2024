@@ -121,6 +121,14 @@ lv_obj_t * ui_BackHome;
 lv_obj_t * ui____initial_actions0;
 // const lv_img_dsc_t * ui_imgset_venus_320x[1] = {&ui_img_test_venus_320x240_png};
 
+
+// SCREEN: ui_JoystickScreen
+void ui_JoystickScreen_screen_init(void);
+lv_obj_t * ui_JoystickScreen;
+lv_obj_t * ui_NLO;
+lv_obj_t * ui____initial_actions0;
+const lv_img_dsc_t * ui_imgset_venus_320x[1] = {&ui_img_test_venus_320x240_png};
+
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16
     #error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
@@ -282,6 +290,7 @@ void ui_init(void)
     ui_InfoScreen_screen_init();
     ui_TickTackToeGame_screen_init();
     ui_EndGameScreen_screen_init();
+    ui_JoystickScreen_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_MainScreen);
 }
