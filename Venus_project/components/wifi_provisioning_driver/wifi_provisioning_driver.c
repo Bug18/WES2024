@@ -3,12 +3,13 @@
 
 /* Signal Wi-Fi events on this event-group */
 const int WIFI_CONNECTED_EVENT = BIT0;
- EventGroupHandle_t wifi_event_group;
+EventGroupHandle_t wifi_event_group;
 
 #define PROV_QR_VERSION         "v1"
 #define PROV_TRANSPORT_SOFTAP   "softap"
 #define PROV_TRANSPORT_BLE      "ble"
 #define QRCODE_BASE_URL         "https://espressif.github.io/esp-jumpstart/qrcode.html"
+
 
 /* Event handler for catching system events */
 void event_handler(void* arg, esp_event_base_t event_base,
@@ -109,35 +110,6 @@ esp_err_t custom_prov_data_handler(uint32_t session_id, const uint8_t *inbuf, ss
     return ESP_OK;
 }
 
-void wifi_prov_print_qr(const char *name, const char *username, const char *pop, const char *transport)
-{
-    if (!name || !transport) {
-        ESP_LOGW("provisioning", "Cannot generate QR code payload. Data missing.");
-        return;
-    }
-    char payload[150] = {0};
-    if (pop) {
-#if CONFIG_EXAMPLE_PROV_SECURITY_VERSION_1
-        snprintf(payload, sizeof(payload), "{\"ver\":\"%s\",\"name\":\"%s\"" \
-                    ",\"pop\":\"%s\",\"transport\":\"%s\"}",
-                    PROV_QR_VERSION, name, pop, transport);
-#elif CONFIG_EXAMPLE_PROV_SECURITY_VERSION_2
-        snprintf(payload, sizeof(payload), "{\"ver\":\"%s\",\"name\":\"%s\"" \
-                    ",\"username\":\"%s\",\"pop\":\"%s\",\"transport\":\"%s\"}",
-                    PROV_QR_VERSION, name, username, pop, transport);
-#endif
-    } else {
-        snprintf(payload, sizeof(payload), "{\"ver\":\"%s\",\"name\":\"%s\"" \
-                    ",\"transport\":\"%s\"}",
-                    PROV_QR_VERSION, name, transport);
-    }
-#ifdef CONFIG_EXAMPLE_PROV_SHOW_QR
-    ESP_LOGI("provisioning", "Scan this QR code from the provisioning application for Provisioning.");
-    esp_qrcode_config_t cfg = ESP_QRCODE_CONFIG_DEFAULT();
-    esp_qrcode_generate(&cfg, payload);
-#endif /* CONFIG_APP_WIFI_PROV_SHOW_QR */
-    ESP_LOGI("provisioning", "If QR code is not visible, copy paste the below URL in a browser.\n%s?data=%s", QRCODE_BASE_URL, payload);
-}
 
 void initalize_provisioning(void)
 {
@@ -319,11 +291,7 @@ void initalize_provisioning(void)
         // wifi_prov_mgr_wait();
         // wifi_prov_mgr_deinit();
         /* Print QR code for provisioning */
-#ifdef CONFIG_EXAMPLE_PROV_TRANSPORT_BLE
-        wifi_prov_print_qr(service_name, username, pop, PROV_TRANSPORT_BLE);
-#else /* CONFIG_EXAMPLE_PROV_TRANSPORT_SOFTAP */
-        wifi_prov_print_qr(service_name, username, pop, PROV_TRANSPORT_SOFTAP);
-#endif /* CONFIG_EXAMPLE_PROV_TRANSPORT_BLE */
+
     } else {
         ESP_LOGI("provisioning", "Already provisioned, starting Wi-Fi STA");
 
