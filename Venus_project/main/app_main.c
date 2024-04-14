@@ -17,6 +17,7 @@
 // #include "sntp_rtc_driver.h"
 #include "eeprom_driver.h"
 #include "button_driver.h"
+#include "sntp_rtc_driver.h"
 
 
 #define DELAY_TIME_MS (5000U) 
@@ -65,7 +66,7 @@ void app_main(void)
     button_setup();
 
     // Initialize SNTP + RTC
-    // sntp_rtc_init();
+    sntp_rtc_init();
 
     // Initialize LEDs
     _led_task_init();

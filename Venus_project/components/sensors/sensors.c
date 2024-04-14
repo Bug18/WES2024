@@ -1,5 +1,33 @@
 #include "sensors.h"
 
+void welcome_jingle() {
+    _led_event_t led_setup_r = {
+        .led = LED_RED,
+        .delay_off = 0,
+        .delay_on = 250,
+        .count = 1
+    };
+    led_queue_message(&led_setup_r);
+
+    _led_event_t led_setup_g = {
+        .led = LED_GREEN,
+        .delay_off = 0,
+        .delay_on = 250,
+        .count = 1
+    };
+    led_queue_message(&led_setup_g);
+
+    _led_event_t led_setup_b = {
+        .led = LED_BLUE,
+        .delay_off = 0,
+        .delay_on = 250,
+        .count = 1
+    };
+    led_queue_message(&led_setup_b);
+
+    buzzer_send_signal_IRQ(WELCOME);
+}
+
 void sensors_task(void *params) {
     //vTaskDelay(10000 / portTICK_PERIOD_MS);
     int message_id;
@@ -9,6 +37,9 @@ void sensors_task(void *params) {
     // EARTHQUAKE
     char has_tested = 0; 
     float past_Z_acc = 0;
+
+    // STARTUP JINGLE
+    welcome_jingle();
 
     while(1) {
         float acc[3] = {0.f, 0.f, 0.f};
