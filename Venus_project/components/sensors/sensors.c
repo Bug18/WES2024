@@ -28,6 +28,15 @@ void sensors_task(void *params) {
 
             if(has_tested && fabs(past_Z_acc - acc[2]) > 0.2) {
                 buzzer_send_signal(SOS);
+
+                _led_event_t led_setup = {
+                    .led = LED_RED,
+                    .delay_off = 100,
+                    .delay_on = 100,
+                    .count = 10
+                };
+                led_queue_message(&led_setup);
+
             } else {
                 has_tested = 1;
             }
