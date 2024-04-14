@@ -16,6 +16,7 @@
 
 // #include "sntp_rtc_driver.h"
 #include "eeprom_driver.h"
+#include "button_driver.h"
 
 
 #define DELAY_TIME_MS (5000U) 
@@ -59,6 +60,9 @@ void app_main(void)
     // ESP_ERROR_CHECK(esp_event_loop_create_default());
 
     vTaskDelay(2000 / portTICK_PERIOD_MS);
+
+    // Button setup
+    button_setup();
 
     // Initialize SNTP + RTC
     // sntp_rtc_init();
