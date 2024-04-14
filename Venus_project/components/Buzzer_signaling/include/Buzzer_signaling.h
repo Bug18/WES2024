@@ -34,3 +34,4 @@ typedef enum {
 void buzzer_init();
 
 void buzzer_send_signal(buzzer_signal_enum_t event);
+void buzzer_send_signal_IRQ(buzzer_signal_enum_t event);
