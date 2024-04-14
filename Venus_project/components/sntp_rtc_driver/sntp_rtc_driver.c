@@ -1,27 +1,30 @@
 #include "sntp_rtc_driver.h"
 
+static void initialize_sntp(void)
+{
+    ESP_LOGI(TAG, "Initializing SNTP");
+    esp_sntp_setoperatingmode(ESP_SNTP_OPMODE_POLL);
+
+    esp_sntp_setservername(0, "pool.ntp.org");     // set the secondary NTP server (will be used only if SNTP_MAX_SERVERS > 1)
+
+    esp_sntp_init();
+}
+
 static void sntp_obtain_time(void)
 {
-    ESP_LOGI(TAG, "Initializing and starting SNTP");
-
-    /*
-     * This is the basic default config with one server and starting the service
-     */
-    esp_sntp_config_t config = ESP_NETIF_SNTP_DEFAULT_CONFIG(CONFIG_SNTP_TIME_SERVER);
-    esp_netif_sntp_init(&config);
+    initialize_sntp();
 
     // wait for time to be set
     time_t now = 0;
     struct tm timeinfo = { 0 };
     int retry = 0;
     const int retry_count = 15;
-    while (esp_netif_sntp_sync_wait(2000 / portTICK_PERIOD_MS) == ESP_ERR_TIMEOUT && ++retry < retry_count) {
+    while (sntp_get_sync_status() == SNTP_SYNC_STATUS_RESET && ++retry < retry_count) {
         ESP_LOGI(TAG, "Waiting for system time to be set... (%d/%d)", retry, retry_count);
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
     }
     time(&now);
     localtime_r(&now, &timeinfo);
-
-    esp_netif_sntp_deinit();
 }
 
 void sntp_rtc_task(void* parameter)
@@ -88,5 +91,5 @@ void sntp_rtc_task(void* parameter)
 }
 
 void sntp_rtc_init(void) {
-    xTaskCreate(&sntp_rtc_task, "sntp_rtc", 1024*2, NULL, 2, NULL);
+    xTaskCreate(&sntp_rtc_task, "sntp_rtc", 1024*4, NULL, 2, NULL);
 }
