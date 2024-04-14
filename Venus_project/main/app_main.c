@@ -13,6 +13,7 @@
 #include "led.h"
 #include "sensors.h"
 #include "Buzzer_signaling.h"
+#include "eeprom_driver.h"
 
 #define DELAY_TIME_MS (5000U) 
 
@@ -70,7 +71,7 @@ void app_main(void)
 
     // Start MQTT
     mqtt_app_start();
-
+    
     /*----------------------------End of Intialization----------------------------*/
 
     

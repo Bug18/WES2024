@@ -53,7 +53,7 @@ int32_t accel_init() {
 
     lis2dh12_block_data_update_set(&ctx, PROPERTY_ENABLE);
     lis2dh12_data_rate_set(&ctx, LIS2DH12_ODR_1Hz);
-    lis2dh12_full_scale_set(&ctx, LIS2DH12_2g);
+    lis2dh12_full_scale_set(&ctx, LIS2DH12_8g);
     lis2dh12_operating_mode_set(&ctx, LIS2DH12_HR_12bit);
 
     return 0;
@@ -71,9 +71,9 @@ int32_t accel_read_polling(float *acc) {
     if (reg.byte) {
         memset(data_raw_acceleration, 0x00, 3 * sizeof(int16_t));
         lis2dh12_acceleration_raw_get(&ctx, data_raw_acceleration);
-        acc[0] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[0]);
-        acc[1] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[1]);
-        acc[2] = lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration[2]);
+        acc[0] = lis2dh12_from_fs8_hr_to_mg(data_raw_acceleration[0]) / 1000.f;
+        acc[1] = lis2dh12_from_fs8_hr_to_mg(data_raw_acceleration[1]) / 1000.f;
+        acc[2] = lis2dh12_from_fs8_hr_to_mg(data_raw_acceleration[2]) / 1000.f;
 
         return 0;
     }
