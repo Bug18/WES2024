@@ -57,6 +57,9 @@ void sensors_task(void *params) {
         }else{
             printf("Message succesfully published");
         }
+
+        // writing to eeprom
+        eeprom_write(0x50, 0x00, (uint8_t)temp, sizeof(temp));
         
         led_queue_blue_led();
         vTaskDelay(1000 / portTICK_PERIOD_MS); 

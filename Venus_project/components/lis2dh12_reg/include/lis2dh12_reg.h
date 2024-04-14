@@ -767,6 +767,7 @@ typedef enum
   LIS2DH12_NM_10bit   = 1,
   LIS2DH12_LP_8bit    = 2,
 } lis2dh12_op_md_t;
+
 int32_t lis2dh12_operating_mode_set(const stmdev_ctx_t *ctx,
                                     lis2dh12_op_md_t val);
 int32_t lis2dh12_operating_mode_get(const stmdev_ctx_t *ctx,
