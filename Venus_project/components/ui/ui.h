@@ -118,8 +118,15 @@ extern lv_obj_t * ui_BackHomeButton;
 extern lv_obj_t * ui_BackHome;
 extern lv_obj_t * ui____initial_actions0;
 
+// SCREEN: ui_JoystickScreen
+void ui_JoystickScreen_screen_init(void);
+extern lv_obj_t * ui_JoystickScreen;
+extern lv_obj_t * ui_NLO;
+extern lv_obj_t * ui____initial_actions0;
+
 
 LV_IMG_DECLARE(ui_img_test_venus_320x240_png);    // assets/test/venus_320x240.png
+LV_IMG_DECLARE(ui_img_1806197300);    // assets/test/x2ww_5npv_210520-Photoroom.png-Photoroom.png
 
 
 
