@@ -176,7 +176,7 @@ void parse_subscriber_message(esp_mqtt_event_handle_t event){
                     item = cJSON_GetArrayItem(xArray, i);
                     
                     if (game[item->valueint] == 0) {
-                        lv_obj_clear_flag(xObj[i], LV_OBJ_FLAG_HIDDEN);
+                        lv_obj_clear_flag(xObj[item->valueint], LV_OBJ_FLAG_HIDDEN);
 
                         game_status m = makeMove('x', i);
 
@@ -203,7 +203,7 @@ void parse_subscriber_message(esp_mqtt_event_handle_t event){
                     item = cJSON_GetArrayItem(oArray, j);
 
                     if (game[item->valueint] == 0) {
-                        lv_obj_clear_flag(oObj[j], LV_OBJ_FLAG_HIDDEN);
+                        lv_obj_clear_flag(oObj[item->valueint], LV_OBJ_FLAG_HIDDEN);
 
                         game_status m = makeMove('o', j);
 
