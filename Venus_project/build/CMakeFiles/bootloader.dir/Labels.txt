@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/CMakeFiles/bootloader
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/CMakeFiles/bootloader.rule
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/CMakeFiles/bootloader-complete.rule
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
