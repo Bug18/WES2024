@@ -26,7 +26,7 @@ void sensors_task(void *params) {
             sprintf(array, "Acc (Z):          %0.2f", acc[2]);
             lv_label_set_text(ui_Accelerometer2, array);
 
-            if(has_tested && fabs(past_Z_acc - acc[2]) > 100) {
+            if(has_tested && fabs(past_Z_acc - acc[2]) > 0.2) {
                 buzzer_send_signal(SOS);
             } else {
                 has_tested = 1;

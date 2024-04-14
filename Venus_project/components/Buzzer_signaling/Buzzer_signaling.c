@@ -122,7 +122,11 @@ void buzzer_task(void *pvParameters) {
 }
 
 void buzzer_send_signal(buzzer_signal_enum_t event) {
-    xQueueSend(buzzerEventQueue, &event, pdMS_TO_TICKS(500));
+    xQueueSend(buzzerEventQueue, &event, pdFALSE);
+}
+
+void buzzer_send_signal_IRQ(buzzer_signal_enum_t event) {
+    xQueueSendFromISR(buzzerEventQueue, &event, pdFALSE);
 }
 
 void buzzer_init() {

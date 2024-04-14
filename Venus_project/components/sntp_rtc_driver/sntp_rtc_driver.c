@@ -5,7 +5,7 @@ static void initialize_sntp(void)
     ESP_LOGI(TAG, "Initializing SNTP");
     esp_sntp_setoperatingmode(ESP_SNTP_OPMODE_POLL);
 
-    esp_sntp_setservername(0, "pool.ntp.org");     // set the secondary NTP server (will be used only if SNTP_MAX_SERVERS > 1)
+    esp_sntp_setservername(0, "pool.ntp.org");
 
     esp_sntp_init();
 }

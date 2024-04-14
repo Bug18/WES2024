@@ -2,7 +2,8 @@
     "idf.adapterTargetName": "esp32",
     "files.associations": {
         "*.ejs": "html",
-        "sntp_rtc_driver.h": "c"
+        "sntp_rtc_driver.h": "c",
+        "buzzer_signaling.h": "c"
     },
     "idf.espIdfPathWin": "e:\\Programs\\ESP\\esp-wes\\esp-idf",
     "idf.pythonBinPathWin": "C:\\Espressif\\python_env\\idf5.0_py3.11_env\\Scripts\\python.exe",
