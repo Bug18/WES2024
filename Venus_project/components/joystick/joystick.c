@@ -1,28 +1,119 @@
 #include "joystick.h"
-#include "driver/gpio.h"
-#include <stdio.h>
 
-#define JOY_X_PIN 34U
-#define JOY_Y_PIN 35U
 
-void init_joystick() {
-    // Configure joystick pins as input
-    gpio_config_t io_conf;
-    io_conf.intr_type = GPIO_INTR_DISABLE;
-    io_conf.mode = GPIO_MODE_INPUT;
-    io_conf.pin_bit_mask = (1ULL << JOY_X_PIN) | (1ULL << JOY_Y_PIN);
-    io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
-    io_conf.pull_up_en = GPIO_PULLUP_ENABLE;
-    gpio_config(&io_conf);
+static int adc_raw[2][10];
+static int voltage[2][10];
+
+
+void init_joystick(void) {
+    //-------------ADC1 Init---------------//
+    adc_oneshot_unit_handle_t adc1_handle;
+    adc_oneshot_unit_init_cfg_t init_config1 = {
+        .unit_id = ADC_UNIT_1,
+    };
+    ESP_ERROR_CHECK(adc_oneshot_new_unit(&init_config1, &adc1_handle));
+
+    //-------------ADC1 Config---------------//
+    adc_oneshot_chan_cfg_t config = {
+        .bitwidth = ADC_BITWIDTH_DEFAULT,
+        .atten = EXAMPLE_ADC_ATTEN,
+    };
+    ESP_ERROR_CHECK(adc_oneshot_config_channel(adc1_handle, EXAMPLE_ADC1_CHAN0, &config));
+    ESP_ERROR_CHECK(adc_oneshot_config_channel(adc1_handle, EXAMPLE_ADC1_CHAN1, &config));
+
+    //-------------ADC1 Calibration Init---------------//
+    adc_cali_handle_t adc1_cali_handle = NULL;
+    bool do_calibration1 = example_adc_calibration_init(ADC_UNIT_1, EXAMPLE_ADC_ATTEN, &adc1_cali_handle);   
+
+    while (1) {
+        ESP_ERROR_CHECK(adc_oneshot_read(adc1_handle, EXAMPLE_ADC1_CHAN0, &adc_raw[0][0]));
+        // ESP_LOGI("joystick", "ADC%d Channel[%d] Raw Data: %d", ADC_UNIT_1 + 1, EXAMPLE_ADC1_CHAN0, adc_raw[0][0]);
+        if (do_calibration1) {
+            ESP_ERROR_CHECK(adc_cali_raw_to_voltage(adc1_cali_handle, adc_raw[0][0], &voltage[0][0]));
+            // ESP_LOGI("joystick", "ADC%d Channel[%d] Cali Voltage: %d mV", ADC_UNIT_1 + 1, EXAMPLE_ADC1_CHAN0, voltage[0][0]);
+            lv_obj_set_x(ui_NLO, -1 * (int)((float)adc_raw[0][0] / 4096.f * 160.f - 80.f));
+        }
+        vTaskDelay(pdMS_TO_TICKS(100));
+
+        ESP_ERROR_CHECK(adc_oneshot_read(adc1_handle, EXAMPLE_ADC1_CHAN1, &adc_raw[0][1]));
+        // ESP_LOGI("joystick", "ADC%d Channel[%d] Raw Data: %d", ADC_UNIT_1 + 1, EXAMPLE_ADC1_CHAN1, adc_raw[0][1]);
+        if (do_calibration1) {
+            ESP_ERROR_CHECK(adc_cali_raw_to_voltage(adc1_cali_handle, adc_raw[0][1], &voltage[0][1]));
+            // ESP_LOGI("joystick", "ADC%d Channel[%d] Cali Voltage: %d mV", ADC_UNIT_1 + 1, EXAMPLE_ADC1_CHAN1, voltage[0][1]);
+            lv_obj_set_y(ui_NLO,(int)((float)adc_raw[0][1] / 4096.f * 128.f - 64.f));
+        }
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
+
+    //Tear Down
+    ESP_ERROR_CHECK(adc_oneshot_del_unit(adc1_handle));
+    if (do_calibration1) {
+        example_adc_calibration_deinit(adc1_cali_handle);
+    }
+
 }
 
-int read_joystick_x() {
-    // Read joystick X position
-    return gpio_get_level(JOY_X_PIN);
+
+/*---------------------------------------------------------------
+        ADC Calibration
+---------------------------------------------------------------*/
+bool example_adc_calibration_init(adc_unit_t unit, adc_atten_t atten, adc_cali_handle_t *out_handle)
+{
+    adc_cali_handle_t handle = NULL;
+    esp_err_t ret = ESP_FAIL;
+    bool calibrated = false;
+
+#if ADC_CALI_SCHEME_CURVE_FITTING_SUPPORTED
+    if (!calibrated) {
+        ESP_LOGI("joystick", "calibration scheme version is %s", "Curve Fitting");
+        adc_cali_curve_fitting_config_t cali_config = {
+            .unit_id = unit,
+            .atten = atten,
+            .bitwidth = ADC_BITWIDTH_DEFAULT,
+        };
+        ret = adc_cali_create_scheme_curve_fitting(&cali_config, &handle);
+        if (ret == ESP_OK) {
+            calibrated = true;
+        }
+    }
+#endif
+
+#if ADC_CALI_SCHEME_LINE_FITTING_SUPPORTED
+    if (!calibrated) {
+        ESP_LOGI("joystick", "calibration scheme version is %s", "Line Fitting");
+        adc_cali_line_fitting_config_t cali_config = {
+            .unit_id = unit,
+            .atten = atten,
+            .bitwidth = ADC_BITWIDTH_DEFAULT,
+        };
+        ret = adc_cali_create_scheme_line_fitting(&cali_config, &handle);
+        if (ret == ESP_OK) {
+            calibrated = true;
+        }
+    }
+#endif
+
+    *out_handle = handle;
+    if (ret == ESP_OK) {
+        ESP_LOGI("joystick", "Calibration Success");
+    } else if (ret == ESP_ERR_NOT_SUPPORTED || !calibrated) {
+        ESP_LOGW("joystick", "eFuse not burnt, skip software calibration");
+    } else {
+        ESP_LOGE("joystick", "Invalid arg or no memory");
+    }
+
+    return calibrated;
 }
 
-int read_joystick_y() {
-    // Read joystick Y position
-    return gpio_get_level(JOY_Y_PIN);
+void example_adc_calibration_deinit(adc_cali_handle_t handle)
+{
+#if ADC_CALI_SCHEME_CURVE_FITTING_SUPPORTED
+    ESP_LOGI("joystick", "deregister %s calibration scheme", "Curve Fitting");
+    ESP_ERROR_CHECK(adc_cali_delete_scheme_curve_fitting(handle));
+
+#elif ADC_CALI_SCHEME_LINE_FITTING_SUPPORTED
+    ESP_LOGI("joystick", "deregister %s calibration scheme", "Line Fitting");
+    ESP_ERROR_CHECK(adc_cali_delete_scheme_line_fitting(handle));
+#endif 
 }
 

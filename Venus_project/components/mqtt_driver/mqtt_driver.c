@@ -141,7 +141,8 @@ int send_game_message(char *turn, char *game_array){
     }
     
     cJSON_AddItemToObject(root, "indexX", xArray);
-    cJSON_AddItemToObject(root, "indexY", oArray);
+    cJSON_AddItemToObject(root, "indexO", oArray);
+    cJSON_AddStringToObject(root, "turn", "server");
 
     char *jsonMessage = cJSON_PrintUnformatted(root);
     
@@ -160,21 +161,21 @@ void parse_subscriber_message(esp_mqtt_event_handle_t event){
     lv_obj_t *xObj[9] = {ui_X0, ui_X1, ui_X2, ui_X3, ui_X4, ui_X5, ui_X6, ui_X7, ui_X8}; 
     lv_obj_t *oObj[9] = {ui_O0, ui_O1, ui_O2, ui_O3, ui_O4, ui_O5, ui_O6, ui_O7, ui_O8};
 
-    if (!strcmp(event->topic, "WES/Venus/game")){
+    if (1==1){
         char *game = get_game_array();
         raw = cJSON_Parse(event->data);
         if (raw != NULL){
             turn = cJSON_GetObjectItemCaseSensitive(raw, "turn");
+
+            printf("Turn: %s\n", turn->valuestring);
             if (!strcmp(turn->valuestring, "device")){
                 xArray = cJSON_GetObjectItemCaseSensitive(raw, "indexX");
                 oArray = cJSON_GetObjectItemCaseSensitive(raw, "indexO");
 
-                cJSON_Delete(raw);
-
                 for (int i = 0; i < cJSON_GetArraySize(xArray); i++){
                     item = cJSON_GetArrayItem(xArray, i);
                     
-                    if (game[item->valueint] != 0) {
+                    if (game[item->valueint] == 0) {
                         lv_obj_clear_flag(xObj[i], LV_OBJ_FLAG_HIDDEN);
 
                         game_status m = makeMove('x', i);
@@ -195,16 +196,13 @@ void parse_subscriber_message(esp_mqtt_event_handle_t event){
                         break;
                     }
 
-                    game[item->valueint] = 'x';                
+                    // game[item->valueint] = 'x';                
                 }
 
                 for (int j = 0; j < cJSON_GetArraySize(oArray); j++){
                     item = cJSON_GetArrayItem(oArray, j);
 
-                    if (game[item->valueint] != 0) {
-                        lv_obj_clear_flag(oObj[j], LV_OBJ_FLAG_HIDDEN);
-
-                        if (game[item->valueint] != 0) {
+                    if (game[item->valueint] == 0) {
                         lv_obj_clear_flag(oObj[j], LV_OBJ_FLAG_HIDDEN);
 
                         game_status m = makeMove('o', j);
@@ -224,9 +222,8 @@ void parse_subscriber_message(esp_mqtt_event_handle_t event){
                         
                         break;
                     }
-                    }
 
-                    game[item->valueint] = 'o';                
+                    // game[item->valueint] = 'o';                
                 }
             }
         }

@@ -10,7 +10,8 @@ static void _btn_2_isr(void *p_arg){
 }
 
 static void _btn_3_isr(void *p_arg){
-    buzzer_send_signal_IRQ(WELCOME);
+    // buzzer_send_signal_IRQ(WELCOME);
+    _ui_screen_change(&ui_JoystickScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_JoystickScreen_screen_init);
 }
 
 static void _btn_4_isr(void *p_arg){
