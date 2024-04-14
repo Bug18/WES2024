@@ -14,13 +14,14 @@
 #include "sensors.h"
 #include "Buzzer_signaling.h"
 
-
 #define DELAY_TIME_MS (5000U) 
+
 
 void app_main(void)
 {
     /*----------------------------Intialization----------------------------*/
 
+    // Initialize user interface on onboard screen
     user_interface_init();
     
     //Initialize NVS
@@ -55,54 +56,73 @@ void app_main(void)
 
     vTaskDelay(2000 / portTICK_PERIOD_MS); 
 
+    // Initialize LEDs
     _led_task_init();
+
+    // Initalize buzzer
     buzzer_init();
+
+    // Initialize sensors
     sensors_init();
-}
 
-    /* This helper function configures Wi-Fi or Ethernet, as selected in menuconfig.
-     * Read "Establishing Wi-Fi or Ethernet Connection" section in
-     * examples/protocols/README.md for more information about this function.
-     */
     // ESP_ERROR_CHECK(example_connect());
-
     // vTaskDelay(DELAY_TIME_MS / portTICK_PERIOD_MS);
 
-    esp_mqtt_client_handle_t *client = mqtt_app_start();
+    // Start MQTT
+    mqtt_app_start();
 
     /*----------------------------End of Intialization----------------------------*/
 
-    float acc[3] = {5.0f, -5.0f, 5.0f};
-    float temp = 23.2f;
-    float hum = 53.9f;
+    
 
-    int message_id;
 
-    message_id = send_sensor_message(client, temp, hum, acc);
 
-    if (message_id == -1){
-        printf("Message publish failed");
-    }else{
-        printf("Message succesfully published");
-    }
 
-    /* Do something */
-    esp_err_t err = ESP_OK;
-    int index = 0;
-    for(;;)
-    {
-        if (index == 3){
-            err = disconnect_wifi();
 
-            if (err == ESP_OK){
-                printf("Disconnect succesful");
-                break;
-            } else {
-                printf("Disconnect unsuccesful!");
-            }
-        }
-        printf("[%d] WiFi Example!\n", index);
-        index++;
-        vTaskDelay(DELAY_TIME_MS / portTICK_PERIOD_MS);
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // float acc[3] = {5.0f, -5.0f, 5.0f};
+    // float temp = 23.2f;
+    // float hum = 53.9f;
+
+    // int message_id;
+
+    // message_id = send_sensor_message(client, temp, hum, acc);
+
+    // if (message_id == -1){
+    //     printf("Message publish failed");
+    // }else{
+    //     printf("Message succesfully published");
+    // }
+
+    // /* Do something */
+    // esp_err_t err = ESP_OK;
+    // int index = 0;
+    // for(;;)
+    // {
+    //     if (index == 3){
+    //         err = disconnect_wifi();
+
+    //         if (err == ESP_OK){
+    //             printf("Disconnect succesful");
+    //             break;
+    //         } else {
+    //             printf("Disconnect unsuccesful!");
+    //         }
+    //     }
+    //     printf("[%d] WiFi Example!\n", index);
+    //     index++;
+    //     vTaskDelay(DELAY_TIME_MS / portTICK_PERIOD_MS);
+    // }
 }

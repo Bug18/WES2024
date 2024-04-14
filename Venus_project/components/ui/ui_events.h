@@ -3,6 +3,8 @@
 // LVGL version: 8.3.6
 // Project name: SquareLine_Project
 
+#include "mqtt_driver.h"
+
 #ifndef _UI_EVENTS_H
 #define _UI_EVENTS_H
 

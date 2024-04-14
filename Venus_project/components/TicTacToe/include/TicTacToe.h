@@ -1,3 +1,5 @@
+#pragma once
+
 typedef enum
 {
     GAME_ENDED,
@@ -16,3 +18,5 @@ bool gameWon(void);
 bool gameEnded();
 game_status makeMove(char letter, int position);
 player getCurrentPlayer();
+char *get_game_array(void);
+void clearGui();

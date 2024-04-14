@@ -11,7 +11,7 @@
 #include "lwip/err.h"
 #include "lwip/sys.h"
 
-#include <wifi_provisioning/manager.h>
+// #include <wifi_provisioning/manager.h>
 
 
 // #define EXAMPLE_ESP_WIFI_SSID      CONFIG_ESP_WIFI_SSID

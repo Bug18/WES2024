@@ -13,6 +13,6 @@ SET(
     COMPONENT_ADD_INCLUDEDIRS "."
 )
 
-set(COMPONENT_REQUIRES lvgl TicTacToe)
+set(COMPONENT_REQUIRES lvgl TicTacToe mqtt_driver)
 
 register_component()

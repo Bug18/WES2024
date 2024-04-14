@@ -8,5 +8,6 @@
 #include "ui.h"
 #include "led.h"
 #include "Buzzer_signaling.h"
+#include "mqtt_driver.h"
 
 void sensors_init();

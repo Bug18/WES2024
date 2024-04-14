@@ -394,7 +394,27 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+  include("C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/Buzzer_signaling/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/TicTacToe/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
   include("C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/WiFi/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/lis2dh12_reg/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/accel/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
@@ -409,6 +429,16 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+  include("C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/mqtt_driver/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/ui/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
   include("C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/gui/cmake_install.cmake")
 endif()
 
@@ -419,7 +449,12 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/mqtt_driver/cmake_install.cmake")
+  include("C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/sht31/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/sensors/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)

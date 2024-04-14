@@ -119,7 +119,7 @@ void ui_event_BackHomeButton(lv_event_t * e);
 lv_obj_t * ui_BackHomeButton;
 lv_obj_t * ui_BackHome;
 lv_obj_t * ui____initial_actions0;
-const lv_img_dsc_t * ui_imgset_venus_320x[1] = {&ui_img_test_venus_320x240_png};
+// const lv_img_dsc_t * ui_imgset_venus_320x[1] = {&ui_img_test_venus_320x240_png};
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16

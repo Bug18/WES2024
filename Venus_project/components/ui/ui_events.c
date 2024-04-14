@@ -6,10 +6,11 @@
 #include "ui.h"
 #include <stdio.h>
 #include "TicTacToe.h"
+#include "ui_events.h"
 
 char myChar;
 
-void clearGui() {
+void clearGui(void) {
 	lv_obj_add_flag(ui_X0, LV_OBJ_FLAG_HIDDEN);
 	lv_obj_add_flag(ui_O0, LV_OBJ_FLAG_HIDDEN);
 	lv_obj_add_flag(ui_X1, LV_OBJ_FLAG_HIDDEN);
@@ -57,10 +58,8 @@ void gui_move(int id, lv_obj_t *X_obj, lv_obj_t *O_obj) {
 			clearGui();
 		}
 
-		
-
-		// TODO - send to mqtt
-		
+		// mqtt message
+		send_game_message("server", get_game_array());
 	}
 }
 
@@ -78,6 +77,9 @@ void startWithO(lv_event_t * e)
 	myChar = 'o';
 
 	_ui_screen_change(&ui_TickTackToeGame, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_TickTackToeGame_screen_init);
+	
+	// NEEDED FOR GAME TO START PROPPERLY!!!
+	send_game_message("server", get_game_array());
 }
 
 void position0_clicked(lv_event_t * e)

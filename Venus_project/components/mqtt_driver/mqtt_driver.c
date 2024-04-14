@@ -21,17 +21,11 @@ void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event
     switch ((esp_mqtt_event_id_t)event_id) {
         case MQTT_EVENT_CONNECTED:
             ESP_LOGI("MQTT", "MQTT_EVENT_CONNECTED");
-            msg_id = esp_mqtt_client_publish(client, "WES/Venus/sensors", "data_3", 0, 1, 0);
-            ESP_LOGI("MQTT", "sent publish successful, msg_id=%d", msg_id);
+            // msg_id = send_sensor_message(0.f, 0.f, {0.f, 0.f, 0.f});
+            // ESP_LOGI("MQTT", "sent publish successful, msg_id=%d", msg_id);
 
-            msg_id = esp_mqtt_client_subscribe(client, "/topic/qos0", 0);
+            msg_id = esp_mqtt_client_subscribe(client, "WES/Venus/game", 0);
             ESP_LOGI("MQTT", "sent subscribe successful, msg_id=%d", msg_id);
-
-            msg_id = esp_mqtt_client_subscribe(client, "/topic/qos1", 1);
-            ESP_LOGI("MQTT", "sent subscribe successful, msg_id=%d", msg_id);
-
-            msg_id = esp_mqtt_client_unsubscribe(client, "/topic/qos1");
-            ESP_LOGI("MQTT", "sent unsubscribe successful, msg_id=%d", msg_id);
             break;
         case MQTT_EVENT_DISCONNECTED:
             ESP_LOGI("MQTT", "MQTT_EVENT_DISCONNECTED");
@@ -39,8 +33,8 @@ void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event
 
         case MQTT_EVENT_SUBSCRIBED:
             ESP_LOGI("MQTT", "MQTT_EVENT_SUBSCRIBED, msg_id=%d", event->msg_id);
-            msg_id = esp_mqtt_client_publish(client, "/topic/qos0", "data", 0, 0, 0);
-            ESP_LOGI("MQTT", "sent publish successful, msg_id=%d", msg_id);
+            // msg_id = esp_mqtt_client_publish(client, "/topic/qos0", "data", 0, 0, 0);
+            // ESP_LOGI("MQTT", "sent publish successful, msg_id=%d", msg_id);
             break;
         case MQTT_EVENT_UNSUBSCRIBED:
             ESP_LOGI("MQTT", "MQTT_EVENT_UNSUBSCRIBED, msg_id=%d", event->msg_id);
@@ -52,6 +46,7 @@ void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event
             ESP_LOGI("MQTT", "MQTT_EVENT_DATA");
             printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
             printf("DATA=%.*s\r\n", event->data_len, event->data);
+            parse_subscriber_message(event);
             break;
         case MQTT_EVENT_ERROR:
             ESP_LOGI("MQTT", "MQTT_EVENT_ERROR");
@@ -70,7 +65,7 @@ void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event
 }
 
 
-esp_mqtt_client_handle_t *mqtt_app_start(void)
+void mqtt_app_start(void)
 {
     esp_mqtt_client_config_t mqtt_cfg = {
         .broker.address.uri = "mqtt://4gpc.l.time4vps.cloud",
@@ -104,12 +99,10 @@ esp_mqtt_client_handle_t *mqtt_app_start(void)
     /* The last argument may be used to pass data to the event handler, in this example mqtt_event_handler */
     esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler, NULL);
     esp_mqtt_client_start(client);
-
-	return &client;
 }
 
 
-int send_sensor_message(esp_mqtt_client_handle_t *client, float temp, float hum, float *acc){
+int send_sensor_message(float temp, float hum, float *acc){
     int message_id;
 
 	cJSON *root = cJSON_CreateObject();
@@ -123,7 +116,7 @@ int send_sensor_message(esp_mqtt_client_handle_t *client, float temp, float hum,
     char *jsonMessage = cJSON_PrintUnformatted(root);
 
     // Publish JSON message on MQTT
-    message_id = esp_mqtt_client_publish(*client, "WES/Venus/sensors", jsonMessage, 0, 1, 0);
+    message_id = esp_mqtt_client_publish(client, "WES/Venus/sensors", jsonMessage, 0, 1, 0);
 
     // Free memory
     free(jsonMessage);
@@ -133,30 +126,109 @@ int send_sensor_message(esp_mqtt_client_handle_t *client, float temp, float hum,
 }
 
 
-int send_game_message(esp_mqtt_client_handle_t *client, char *turn, int *indexX, int oLen, int *indexO, int xLen){
+int send_game_message(char *turn, char *game_array){
     int message_id;
 
     cJSON *root = cJSON_CreateObject();
     cJSON *xArray = cJSON_CreateArray();
     cJSON *oArray = cJSON_CreateArray();
     
-    for (int i = 0; i < xLen; i++){
-        cJSON_AddItemToArray(xArray, cJSON_CreateNumber(indexX[i]));
-    }
-
-    for (int i = 0; i < oLen; i++){
-        cJSON_AddItemToArray(oArray, cJSON_CreateNumber(indexO[i]));
+    for (int i = 0; i < 9; i++){
+        if (game_array[i] == 'x')
+            cJSON_AddItemToArray(xArray, cJSON_CreateNumber(i));
+        else if (game_array[i] == 'o')
+            cJSON_AddItemToArray(oArray, cJSON_CreateNumber(i));
     }
     
     cJSON_AddItemToObject(root, "indexX", xArray);
-    cJSON_AddItemToObject(root, "indexY", yArray);
+    cJSON_AddItemToObject(root, "indexY", oArray);
 
-    char *jsonMessage = cJSON_PrintUnformatted(root, jsonMessage);
+    char *jsonMessage = cJSON_PrintUnformatted(root);
     
-    message_id = esp_mqtt_client_publish(*client, "WES/Venus/game", jsonMessage, 0, 1, 0);
+    message_id = esp_mqtt_client_publish(client, "WES/Venus/game", jsonMessage, 0, 1, 0);
 
     free(jsonMessage);
     cJSON_Delete(root);
 
     return message_id;
+}
+ 
+
+void parse_subscriber_message(esp_mqtt_event_handle_t event){
+    cJSON *raw, *turn, *xArray, *oArray, *item;
+
+    lv_obj_t *xObj[9] = {ui_X0, ui_X1, ui_X2, ui_X3, ui_X4, ui_X5, ui_X6, ui_X7, ui_X8}; 
+    lv_obj_t *oObj[9] = {ui_O0, ui_O1, ui_O2, ui_O3, ui_O4, ui_O5, ui_O6, ui_O7, ui_O8};
+
+    if (!strcmp(event->topic, "WES/Venus/game")){
+        char *game = get_game_array();
+        raw = cJSON_Parse(event->data);
+        if (raw != NULL){
+            turn = cJSON_GetObjectItemCaseSensitive(raw, "turn");
+            if (!strcmp(turn->valuestring, "device")){
+                xArray = cJSON_GetObjectItemCaseSensitive(raw, "indexX");
+                oArray = cJSON_GetObjectItemCaseSensitive(raw, "indexO");
+
+                cJSON_Delete(raw);
+
+                for (int i = 0; i < cJSON_GetArraySize(xArray); i++){
+                    item = cJSON_GetArrayItem(xArray, i);
+                    
+                    if (game[item->valueint] != 0) {
+                        lv_obj_clear_flag(xObj[i], LV_OBJ_FLAG_HIDDEN);
+
+                        game_status m = makeMove('x', i);
+
+                        if (m == GAME_WON) {
+                            lv_obj_clear_flag(ui_LoseLabel, LV_OBJ_FLAG_HIDDEN);
+                            lv_obj_add_flag(ui_WinLabel, LV_OBJ_FLAG_HIDDEN);
+                            _ui_screen_change(&ui_EndGameScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_EndGameScreen_screen_init);
+                            clearGui();
+                        }else if (m == GAME_ENDED) {
+                            lv_label_set_text(ui_LoseLabel, "Game ended in a draw!");
+                            lv_obj_clear_flag(ui_LoseLabel, LV_OBJ_FLAG_HIDDEN);
+                            lv_obj_add_flag(ui_WinLabel, LV_OBJ_FLAG_HIDDEN);
+                            _ui_screen_change(&ui_EndGameScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_EndGameScreen_screen_init);
+                            clearGui();
+		                }
+
+                        break;
+                    }
+
+                    game[item->valueint] = 'x';                
+                }
+
+                for (int j = 0; j < cJSON_GetArraySize(oArray); j++){
+                    item = cJSON_GetArrayItem(oArray, j);
+
+                    if (game[item->valueint] != 0) {
+                        lv_obj_clear_flag(oObj[j], LV_OBJ_FLAG_HIDDEN);
+
+                        if (game[item->valueint] != 0) {
+                        lv_obj_clear_flag(oObj[j], LV_OBJ_FLAG_HIDDEN);
+
+                        game_status m = makeMove('o', j);
+
+                        if (m == GAME_WON) {
+                            lv_obj_clear_flag(ui_LoseLabel, LV_OBJ_FLAG_HIDDEN);
+                            lv_obj_add_flag(ui_WinLabel, LV_OBJ_FLAG_HIDDEN);
+                            _ui_screen_change(&ui_EndGameScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_EndGameScreen_screen_init);
+                            clearGui();
+                        }else if (m == GAME_ENDED) {
+                            lv_label_set_text(ui_LoseLabel, "Game ended in a draw!");
+                            lv_obj_clear_flag(ui_LoseLabel, LV_OBJ_FLAG_HIDDEN);
+                            lv_obj_add_flag(ui_WinLabel, LV_OBJ_FLAG_HIDDEN);
+                            _ui_screen_change(&ui_EndGameScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_EndGameScreen_screen_init);
+                            clearGui();
+		                }
+                        
+                        break;
+                    }
+                    }
+
+                    game[item->valueint] = 'o';                
+                }
+            }
+        }
+    }
 }

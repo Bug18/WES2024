@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include "TicTacToe.h"
 
+
 char game[9];
 volatile player onmove;
 
@@ -63,12 +64,16 @@ game_status makeMove(char letter, int position) {
     }else if (gameEnded()){
         return GAME_ENDED;
     }else {
-        //if (onmove == DEVICE) onmove = SERVER;
-        //else onmove = DEVICE;
+        if (onmove == DEVICE) onmove = SERVER;
+        else onmove = DEVICE;
         return GAME_ONGOING;
     }
 }
 
 player getCurrentPlayer() {
     return onmove;
+}
+
+char *get_game_array(void) {
+    return game;
 }
