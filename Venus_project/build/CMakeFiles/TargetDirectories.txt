@@ -643,6 +643,13 @@ C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/bui
 C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/accel/CMakeFiles/install.dir
 C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/accel/CMakeFiles/install/local.dir
 C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/accel/CMakeFiles/install/strip.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/eeprom_driver/CMakeFiles/__idf_eeprom_driver.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/eeprom_driver/CMakeFiles/edit_cache.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/eeprom_driver/CMakeFiles/rebuild_cache.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/eeprom_driver/CMakeFiles/list_install_components.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/eeprom_driver/CMakeFiles/install.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/eeprom_driver/CMakeFiles/install/local.dir
+C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/eeprom_driver/CMakeFiles/install/strip.dir
 C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/lvgl/CMakeFiles/__idf_lvgl.dir
 C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/lvgl/CMakeFiles/edit_cache.dir
 C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/lvgl/CMakeFiles/rebuild_cache.dir

@@ -64,6 +64,7 @@ $<TARGET_FILE:__idf_TicTacToe>
 $<TARGET_FILE:__idf_WiFi>
 $<TARGET_FILE:__idf_lis2dh12_reg>
 $<TARGET_FILE:__idf_accel>
+$<TARGET_FILE:__idf_eeprom_driver>
 $<TARGET_FILE:__idf_lvgl>
 $<TARGET_FILE:__idf_lvgl_esp32_drivers>
 $<TARGET_FILE:__idf_mqtt_driver>

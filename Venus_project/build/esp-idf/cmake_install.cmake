@@ -419,6 +419,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+  include("C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/eeprom_driver/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
   include("C:/Users/Naglic/Documents/Projects/Development/WES2024/WES2024/Venus_project/build/esp-idf/lvgl/cmake_install.cmake")
 endif()
 

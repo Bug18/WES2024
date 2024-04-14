@@ -9,5 +9,6 @@
 #include "led.h"
 #include "Buzzer_signaling.h"
 #include "mqtt_driver.h"
+#include "eeprom_driver.h"
 
 void sensors_init();
