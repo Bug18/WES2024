@@ -71,6 +71,8 @@ $<TARGET_FILE:__idf_mqtt_driver>
 $<TARGET_FILE:__idf_ui>
 $<TARGET_FILE:__idf_gui>
 $<TARGET_FILE:__idf_led>
+$<TARGET_FILE:__idf_qrcode_driver>
 $<TARGET_FILE:__idf_sht31>
 $<TARGET_FILE:__idf_sensors>
 $<TARGET_FILE:__idf_user_interface>
+$<TARGET_FILE:__idf_wifi_provisioning_driver>

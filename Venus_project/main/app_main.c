@@ -14,7 +14,7 @@
 #include "sensors.h"
 #include "Buzzer_signaling.h"
 
-#include "sntp_rtc_driver.h"
+// #include "sntp_rtc_driver.h"
 #include "eeprom_driver.h"
 
 
@@ -61,7 +61,7 @@ void app_main(void)
     vTaskDelay(2000 / portTICK_PERIOD_MS);
 
     // Initialize SNTP + RTC
-    sntp_rtc_init();
+    // sntp_rtc_init();
 
     // Initialize LEDs
     _led_task_init();
@@ -77,7 +77,7 @@ void app_main(void)
 
     // Start MQTT
     mqtt_app_start();
-    
+
     /*----------------------------End of Intialization----------------------------*/
 
     
